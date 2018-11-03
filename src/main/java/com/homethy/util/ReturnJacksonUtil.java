@@ -14,6 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @ClassName: ReturnJacksonUtil
+ * @Description: 定制Controller返回值工具类
+ */
 public class ReturnJacksonUtil {
 
   /**
@@ -143,7 +147,7 @@ public class ReturnJacksonUtil {
     JsonProcessingException {
     Map<String, Object> map = new HashMap<>();
     map.put("msg", msg);
-    map.put("code", code);
+    map.put(Constant.RESULT_CODE, code);
     map.put("object", object);
     return JacksonUtils.map2Json(map);
   }

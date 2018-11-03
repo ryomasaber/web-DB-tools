@@ -1,5 +1,8 @@
 package com.homethy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.homethy.util.DateUtil;
+
 import java.util.Date;
 
 /**
@@ -23,6 +26,7 @@ public class DatabaseUserSqlHistory {
     this.id = id;
   }
 
+  @JsonIgnore
   public long getUserId() {
     return userId;
   }
@@ -39,14 +43,20 @@ public class DatabaseUserSqlHistory {
     this.sqlDetail = sqlDetail;
   }
 
+  @JsonIgnore
   public Date getCreateTime() {
     return createTime;
+  }
+
+  public String getTime(){
+    return DateUtil.format(createTime,DateUtil.DATEFORMAT_YYYY_MM_DD_HH_MM_SS);
   }
 
   public void setCreateTime(Date createTime) {
     this.createTime = createTime;
   }
 
+  @JsonIgnore
   public String getClientIp() {
     return clientIp;
   }
@@ -55,6 +65,7 @@ public class DatabaseUserSqlHistory {
     this.clientIp = clientIp;
   }
 
+  @JsonIgnore
   public String getServerIp() {
     return serverIp;
   }

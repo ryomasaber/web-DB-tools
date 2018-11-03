@@ -28,6 +28,11 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
+/**
+ * @Title: HttpRequestUtil.java
+ * @Package com.homethy.app.util
+ * @Description: HttpRequest 参数获取 工具类
+ */
 public class HttpRequestUtil {
   private final static Log logger = LogFactory.getLog(HttpRequestUtil.class);
 
@@ -259,83 +264,37 @@ public class HttpRequestUtil {
     }
   }
 
-  /*
-   * 处理https GET/POST请求
-   * 请求地址、请求方法、参数
-   * */
-  public static String httpsRequest(String requestUrl,String requestMethod,String outputStr){
-    StringBuffer buffer=null;
-    try{
-      //创建SSLContext
-      SSLContext sslContext=SSLContext.getInstance("SSL");
-      TrustManager[] tm={new MyX509TrustManager() {
-      }};
-      //初始化
-      sslContext.init(null, tm, new java.security.SecureRandom());;
-      //获取SSLSocketFactory对象
-      SSLSocketFactory ssf=sslContext.getSocketFactory();
-      URL url=new URL(requestUrl);
-      HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
-      conn.setDoOutput(true);
-      conn.setDoInput(true);
-      conn.setUseCaches(false);
-      conn.setRequestMethod(requestMethod);
-      //设置当前实例使用的SSLSoctetFactory
-      conn.setSSLSocketFactory(ssf);
-      conn.connect();
-      //往服务器端写内容
-      if(null!=outputStr){
-        OutputStream os=conn.getOutputStream();
-        os.write(outputStr.getBytes("utf-8"));
-        os.close();
-      }
-
-      //读取服务器端返回的内容
-      InputStream is=conn.getInputStream();
-      InputStreamReader isr=new InputStreamReader(is,"utf-8");
-      BufferedReader br=new BufferedReader(isr);
-      buffer=new StringBuffer();
-      String line=null;
-      while((line=br.readLine())!=null){
-        buffer.append(line);
-      }
-    }catch(Exception e){
-      e.printStackTrace();
-    }
-    return buffer.toString();
-  }
 
   public static void main(String args[]) throws Exception{
 
-    String scert = "MIIFVzCCBD+gAwIBAgIQQKY1foNn0BsYOq8TIk8hojANBgkqhkiG9w0BAQUFADCB\n" +
-        "tTELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQL\n" +
-        "ExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1c2Ug\n" +
-        "YXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYSAoYykxMDEvMC0GA1UEAxMm\n" +
-        "VmVyaVNpZ24gQ2xhc3MgMyBTZWN1cmUgU2VydmVyIENBIC0gRzMwHhcNMTUwNTI3\n" +
-        "MDAwMDAwWhcNMTUxMjI4MjM1OTU5WjCBqTELMAkGA1UEBhMCQ04xEDAOBgNVBAgT\n" +
-        "B2JlaWppbmcxEDAOBgNVBAcUB2JlaWppbmcxOTA3BgNVBAoUMEJlaUppbmcgQmFp\n" +
-        "ZHUgTmV0Y29tIFNjaWVuY2UgVGVjaG5vbG9neSBDby4sIEx0ZDElMCMGA1UECxQc\n" +
-        "c2VydmljZSBvcGVyYXRpb24gZGVwYXJ0bWVudDEUMBIGA1UEAxQLKi5iYWlkdS5j\n" +
-        "b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDS4pfHYsHL5ML9ltnk\n" +
-        "LdXG5axFxAw4wkR+AohS75V1CAsFPVi4S67ZJuJAoo7+CLHmakWZenwXzxysvce6\n" +
-        "bE9BT27qQe3OCwJueUX/VO8FkmiqK+A9QH9Lgl6egdw1hRV9vvX9fxiGIP/RaafF\n" +
-        "rlZLtI23c+z0SfAlyWVQDfc6mnsK5MT7aDreezkDbzJ1poTVVikIJo4+UjLoWheY\n" +
-        "cJk8I+3epr3Xb6I5Ga8c0JF8Yotv0gBHfbKS4lhAZjOhsqxmUJKvusNsXCOzSH9G\n" +
-        "P41QdjB3bqKPN29QqobDX25SpSOmetBnD4r77Xv+cSRQxPLTBiRPyL/9aNWPfBTe\n" +
-        "+D01AgMBAAGjggFrMIIBZzAhBgNVHREEGjAYggsqLmJhaWR1LmNvbYIJYmFpZHUu\n" +
-        "Y29tMAkGA1UdEwQCMAAwDgYDVR0PAQH/BAQDAgWgMCsGA1UdHwQkMCIwIKAeoByG\n" +
-        "Gmh0dHA6Ly9zZC5zeW1jYi5jb20vc2QuY3JsMGEGA1UdIARaMFgwVgYGZ4EMAQIC\n" +
-        "MEwwIwYIKwYBBQUHAgEWF2h0dHBzOi8vZC5zeW1jYi5jb20vY3BzMCUGCCsGAQUF\n" +
-        "BwICMBkMF2h0dHBzOi8vZC5zeW1jYi5jb20vcnBhMB0GA1UdJQQWMBQGCCsGAQUF\n" +
-        "BwMBBggrBgEFBQcDAjAfBgNVHSMEGDAWgBQNRFwWU0TBgn4dIKsl9AFj2L55pTBX\n" +
-        "BggrBgEFBQcBAQRLMEkwHwYIKwYBBQUHMAGGE2h0dHA6Ly9zZC5zeW1jZC5jb20w\n" +
-        "JgYIKwYBBQUHMAKGGmh0dHA6Ly9zZC5zeW1jYi5jb20vc2QuY3J0MA0GCSqGSIb3\n" +
-        "DQEBBQUAA4IBAQAO0aL9AO6S3zEod2DDIWSz3PP+YXXQNpKF9Kv4KzzFsxPjj1hd\n" +
-        "wdlMj/OcOPQ4PSeHyHCSbQ2m5vX2E+0DhUf0rwMhn4oOHQFuzqHKlWPxA51U5pSJ\n" +
-        "njTpkS1Hpj7GAz0z0+b2dV7a3//rawJojk2kEog9aVw5U+9fBnXWeO3lhCtNSMrj\n" +
-        "Ay/+7hGd/9g59JBSSskd2yoCM0I1wJ7HK1AYoWtZRO1Ufe2I1PfbeY7k520C0x9h\n" +
-        "IEXDDVdjurHOiUU2rNz7AjENeXtjpcn8ejx0V92X8ZnA00bZSrVrOYe+0L56yJxh\n" +
-        "FUm2aNeOPAaTGk7M7CwWQv0t0FhzcfT08UwL";
+    String scert = "MIIFODCCBCCgAwIBAgIIFXEYHW2KqOYwDQYJKoZIhvcNAQELBQAwgbQxCzAJBgNV\n" +
+        "BAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRow\n" +
+        "GAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UECxMkaHR0cDovL2NlcnRz\n" +
+        "LmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQDEypHbyBEYWRkeSBTZWN1\n" +
+        "cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMTgwMjI3MDAxMzAxWhcN\n" +
+        "MjAwMjI3MDAxMzAxWjA9MSEwHwYDVQQLExhEb21haW4gQ29udHJvbCBWYWxpZGF0\n" +
+        "ZWQxGDAWBgNVBAMTD2FzaGxleWRpcmtzLmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD\n" +
+        "ggEPADCCAQoCggEBAMVPMtbYfEzks4+FCKE2PSLhovjLuhLHowAO8qX2XFkXd00b\n" +
+        "BS4RSjSo7dPJ7DtTsZ/XWGogWY0owCwcC0+St2fo2MJNYehkckKODQjJtJreyxxH\n" +
+        "APxvJHLs/aRy7SFfz/1qFq53Etha1/o7iuOeGHRI4ZleL/n7UUJHs8fkrM86DB+m\n" +
+        "7Fw0xP1Emaxisch7nazhnvq4ufqXne8OnOxsSTN5kDt9h9rUtKhcAuPNgyiprA4w\n" +
+        "ECaE8k4k4cWsue/xZ1AUXzWlge3rVvntbG06bjCPIT2X6ncud2aOf6OTJ2vjnzot\n" +
+        "dA8CwcW9CvcUNE7J3ryFzENC00w/WY23kEZbvasCAwEAAaOCAcIwggG+MAwGA1Ud\n" +
+        "EwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMA4GA1UdDwEB\n" +
+        "/wQEAwIFoDA3BgNVHR8EMDAuMCygKqAohiZodHRwOi8vY3JsLmdvZGFkZHkuY29t\n" +
+        "L2dkaWcyczEtODExLmNybDBdBgNVHSAEVjBUMEgGC2CGSAGG/W0BBxcBMDkwNwYI\n" +
+        "KwYBBQUHAgEWK2h0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3Np\n" +
+        "dG9yeS8wCAYGZ4EMAQIBMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0\n" +
+        "cDovL29jc3AuZ29kYWRkeS5jb20vMEAGCCsGAQUFBzAChjRodHRwOi8vY2VydGlm\n" +
+        "aWNhdGVzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvZ2RpZzIuY3J0MB8GA1UdIwQY\n" +
+        "MBaAFEDCvSeOzDSDMKIz1/tss/C0LIDOMC8GA1UdEQQoMCaCD2FzaGxleWRpcmtz\n" +
+        "LmNvbYITd3d3LmFzaGxleWRpcmtzLmNvbTAdBgNVHQ4EFgQU/AtVvgu9b8Ki/fM9\n" +
+        "VzuU1tZoaoUwDQYJKoZIhvcNAQELBQADggEBAB9oZwzetnrXIW5qKTpgIF7VjToW\n" +
+        "UnxVkOKlghmGBF9Hy0EIJ+fl2NTsdDicfFG+yNvH8tIg6UoQm1lq+BwK5STYuNLm\n" +
+        "L/N4JhvVKBqsjWTTdYwFILwVVu2Hhu5SmSchcAk6WASVPg4VG93gWKaWO8rySEAX\n" +
+        "VTf5y83aW+uMpshTwVj4qzYRMqHL/rHo/5Pf/ufuTh2tFVYs8wdjqWdzTa8ehVsT\n" +
+        "ObM+8SPGuzmjFBPaah100E6r6GeS//6m7so05g+B4M/xG7nt5RM/RB+JgGvOw4Gv\n" +
+        "Dp9EAQPolLUFciJaWLaf8EvqVFCiJS0XcRcZnT4ih61HMTa59SPgZj2OYEA=";
 // Base64解码
     BASE64Decoder decoder = new BASE64Decoder();
     byte[] byteCert = decoder.decodeBuffer(scert);
@@ -348,16 +307,16 @@ public class HttpRequestUtil {
     String a = oCert.getSigAlgName();
     String b = oCert.getSigAlgOID();
 //    String c = oCert.getSigAlgParams().toString();
-    String d = oCert.getSignature().toString();
+//    String d = oCert.getSignature().toString();
     Collection al = oCert.getSubjectAlternativeNames();
     String info = p.getName();
-
+    Principal aaa = oCert.getIssuerDN();
 
     NameValuePair[] param = new NameValuePair[3];
     param[0] = new NameValuePair("clientId", "2674");//2409 mymn-homevalue.com
     param[1] = new NameValuePair("page", "1");
     param[2] = new NameValuePair("type", "lead");
-    String aa = httpsRequest("https://www.venturehomerealestate.com/search/centerPoint?key=Lawrenceville%2C+PA&keywordType=city","GET",null);
-    System.out.println(aa);
+//    String aa = httpsRequest("https://www.venturehomerealestate.com/search/centerPoint?key=Lawrenceville%2C+PA&keywordType=city","GET",null);
+//    System.out.println(aa);
   }
 }

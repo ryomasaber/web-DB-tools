@@ -13,7 +13,7 @@
     <div class="tipRowup">
         <span class="rowup">
             您的密码还有<span style="color: red;">${60-user.updatePasswordinterval}天到期</span>,请尽快<a href="/update_password"
-                                                                                          style="color: #01AAED">修改密码</a>,否则无法继续使用该平台工具!
+                                                                                              style="color: #01AAED">修改密码</a>,否则无法继续使用该平台工具!
         </span>
     </div>
     </#if>
@@ -107,20 +107,20 @@
                                     var url = location.search;
                                     if (url.indexOf("?") != -1) {
                                         $.ajax({
-                                                   type: "GET",
-                                                   url: "getSqlDetail",
-                                                   data:{
-                                                       "sqlId": url.substr(3)
-                                                   },
-                                                   success: function (msg) {
-                                                       var result = JSON.parse(msg);
-                                                       editor1.setValue(result.data);
-                                                   },
-                                                   error:function (error) {
-                                                       layer.msg("server error");
-                                                   }
+                                            type: "GET",
+                                            url: "getSqlDetail",
+                                            data:{
+                                                "sqlId": url.substr(3)
+                                            },
+                                            success: function (msg) {
+                                                var result = JSON.parse(msg);
+                                                editor1.setValue(result.data);
+                                            },
+                                            error:function (error) {
+                                                layer.msg("server error");
+                                            }
 
-                                               })
+                                        })
 
                                     }
                                 },
@@ -196,7 +196,7 @@
             <form id="sqlExcResultJson" class="form-horizontal" role="form" style="display:none"
                   enctype="application/x-www-form-urlencoded" >
                 <div class="form-group">
-                    <div style="margin-left: 137px" id="excCountJson"></div>
+                <#--<div style="margin-left: 137px" id="excCountJson"></div>-->
                     <label for="name" class="col-sm-2 control-label">执行结果</label>
                     <div class="col-sm-7 operate-result-data">
                     <#--   <textarea class="form-control data-result" rows="5"
@@ -246,25 +246,25 @@
             </ul>
         </div>
     </div>
-    <div style="width:90%;margin: 0 auto;" >
+    <div id = "tab-style" style="width:90%;margin-top: 50px;margin-left: 90px;" >
+        <from id="excCountJson"></from>
         <form id="loading" class="form-horizontal" role="form" style="display:none" >
             <div class="form-group">
                 <div class="loading">玩儿命加载中...</div>
             </div>
-
         </form>
 
-        <form id="table-result-div" role="form" onsubmit="return false;">
-
-            <div class="form-group operate-result-data" id="result-table" >
-
-                <table id="tb_departments" ></table>
-
+        <div class="layui-tab layui-tab-card layui-hide" id = "table-tab-result" lay-filter="table-tab-result" lay-allowclose="true" >
+            <ul class="layui-tab-title">
+            </ul>
+            <div class="layui-tab-content">
+                <form id="table-result-div" role="form" onsubmit="return false;">
+                    <div class="form-group operate-result-data" id="result-table" >
+                        <table id="tb_departments" ></table>
+                    </div>
+                </form>
             </div>
-
-        </form>
-
-
+        </div>
 
     </div>
 </div>

@@ -1,7 +1,5 @@
 package com.homethy.exception;
 
-import com.google.common.collect.ImmutableMap;
-import com.homethy.constant.ErrorCodeEnum;
 import com.homethy.constant.Constant;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,11 +10,12 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+* 类说明 控制器异常捕获类
+*/
 @ControllerAdvice
 public class GlobalHandlerExceptionResolver implements HandlerExceptionResolver {
 
@@ -44,10 +43,10 @@ public class GlobalHandlerExceptionResolver implements HandlerExceptionResolver 
     Map<String, Object> result = new HashMap<String, Object>();
     MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
 
-    status.put(Constant.RESULT_CODE, ErrorCodeEnum.UNKNOWN_ERROR.getErrorCode());
-    status.put(Constant.RESULT_MSG, ErrorCodeEnum.UNKNOWN_ERROR.getErrorMsg());
-    result.put("data",ex.toString());
-    result.put("status",status);
+    status.put(Constant.RESULT_CODE, Constant.SERRVER_ERROR);
+    status.put(Constant.RESULT_MSG, Constant.SERRVER_ERROR);
+    result.put(Constant.RESULT_DATA,ex.toString());
+    result.put(Constant.RESULT_STATUS,status);
 
     return new ModelAndView(jsonView,result);
 	}

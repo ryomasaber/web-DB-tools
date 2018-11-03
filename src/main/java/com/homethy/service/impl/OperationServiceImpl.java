@@ -2,6 +2,7 @@ package com.homethy.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.homethy.UserHolder;
+import com.homethy.constant.Constant;
 import com.homethy.dao.OperationDao;
 import com.homethy.service.DataOperationService;
 import com.homethy.util.HomethyStringUtil;
@@ -89,13 +90,13 @@ public class OperationServiceImpl implements DataOperationService {
     }catch (Exception e){
       //e.printStackTrace();
       isError=true;
-      result = HomethyStringUtil.returnFailResultStr("error",e.toString());
+      result = HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
 
     try{
       if(StringUtils.isNoneBlank(result)){
         JSONObject jsonResult = JSONObject.fromObject(result);
-        if(jsonResult.getJSONObject("status").getInt("code")==0){
+        if(jsonResult.getJSONObject(Constant.RESULT_STATUS).getInt(Constant.RESULT_CODE)==0){
           operationDao.insertExecuteSqlHistory(env,statement);
         }
       }
@@ -118,7 +119,7 @@ public class OperationServiceImpl implements DataOperationService {
     }catch (Exception e){
       //e.printStackTrace();
       isError=true;
-      result = HomethyStringUtil.returnFailResultStr("error",e.toString());
+      result = HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
 
     return result;

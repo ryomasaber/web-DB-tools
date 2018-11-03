@@ -1,22 +1,20 @@
 package com.homethy.controller;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.homethy.constant.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by leifeifei on 17-12-20.
@@ -102,7 +100,7 @@ public class AppErrorController implements ErrorController{
     Map<String, Object> map = this.errorAttributes.getErrorAttributes(requestAttributes,includeStackTrace);
     String URL = request.getRequestURL().toString();
     map.put("URL", URL);
-    logger.debug("AppErrorController.method [error info]: status-" + map.get("status") +", request url-" + URL);
+    logger.debug("AppErrorController.method [error info]: status-" + map.get(Constant.RESULT_STATUS) +", request url-" + URL);
     return map;
   }
 

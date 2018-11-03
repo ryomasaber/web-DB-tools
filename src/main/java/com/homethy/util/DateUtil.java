@@ -1,7 +1,5 @@
 package com.homethy.util;
 
-import net.sf.json.JSONNull;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -13,8 +11,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Stream;
-
 /**
  * Created by leifeifei on 17-10-12.
  */
@@ -61,6 +57,12 @@ public class DateUtil {
    */
   public static String format(Date date, String pattern) {
     SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+    return sdf.format(date);
+  }
+
+  public static String formatTimeZone(Date date, String pattern) {
+    SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
     return sdf.format(date);
   }
 
@@ -275,10 +277,10 @@ public class DateUtil {
 //    System.out.println(sqlStr.length);
 //    String streetLine="121 dada ada";
 //    String houseNumber = streetLine.trim().substring(0,streetLine.trim().indexOf(" "));
-////    String streetName = streetLine.trim().substring(streetLine.trim().indexOf(" ")+1);
-//int i=0;
-//test(i);
-//    System.out.println(i);
+//    String streetName = streetLine.trim().substring(streetLine.trim().indexOf(" ")+1);
+int i=0;
+test(i);
+    System.out.println(i);
 //    Date date = parse("02/18/18",DateUtil.DATEFORMAT_MM_DD_YY);
 
 
@@ -286,10 +288,6 @@ public class DateUtil {
 //      Date date = DateUtil.parse("02/05/17",DateUtil.DATEFORMAT_MM_DD_YY);
 //      regDate = date!=null ? date.getTime() : 0;
 //    System.out.println(regDate);
-    Object obj = null;
-    System.out.println(obj instanceof JSONObject);
-    System.out.println(((JSONObject)obj).isNullObject());
-    System.out.println(obj instanceof JSONObject ?((JSONObject)obj).isNullObject(): JSONNull.getInstance().equals(obj));
   }
 }
 

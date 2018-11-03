@@ -132,14 +132,20 @@ public class HomethyStringUtil {
   }
 
 
+  public static Boolean checkDomain(String domain){
+    String pattern = "^(?=^.{3,255}$)[a-z0-9][-a-z0-9]{0,62}(\\.[a-z0-9][-a-z0-9]{0,62})+$";
+    return Pattern.matches(pattern,domain);
+  }
+
   public static void main(String args []){
-//    String a= "select *   from agent_info_collection limit 1,5;\n select * from   database_user_info;";
+//    String a= "select *   from collection limit 1,5;\n select * from   database_user_info;";
 //    System.out.println(replceMultipleSpace(a));
 //    System.out.println(a.replaceAll(" +"," "));
 //    System.out.println(a.trim().substring(0,a.length()-1));
 //    System.out.println(replceSingleQuot("select * from   database_user_info where account='selec'"));
 //    "select *  from   aaa where ddd='aa   11 '
-    System.out.println(replceMultipleOnlySpace("select *  from   aaa where ddd='aa   11 ' \nand a  = 'aaa  d  '\n   and ada"));
+//    System.out.println(replceMultipleOnlySpace("select *  from   aaa where ddd='aa   11 ' \nand a  = 'aaa  d  '\n   and ada"));
+    System.out.println(checkDomain(""));
 
   }
 }

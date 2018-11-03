@@ -1,10 +1,10 @@
 package com.homethy.exception;
 
+import com.homethy.constant.Constant;
+
 public class MsgException extends RuntimeException {
 
-  public static final String DEFAULT_TYPE_ERROR = "error";
-
-  private String type = DEFAULT_TYPE_ERROR;
+  private String type = Constant.ERROR;
 
   private static final long serialVersionUID = -6919872844753340832L;
 

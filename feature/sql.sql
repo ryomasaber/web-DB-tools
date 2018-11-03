@@ -1,55 +1,167 @@
-CREATE TABLE sitebuilt.database_user_info
+-- 用户表
+create table database_user_info
 (
-    id INT(11) PRIMARY KEY AUTO_INCREMENT,
-    account VARCHAR(20) DEFAULT '' COMMENT '用户名',
-    password VARCHAR(100) DEFAULT '' COMMENT '密码'
-);
-ALTER TABLE sitebuilt.database_user_info ADD last_login_time DATETIME DEFAULT current_timestamp NULL;
-ALTER TABLE sitebuilt.database_user_info ADD create_time DATETIME DEFAULT CURRENT_TIMESTAMP NULL;
-ALTER TABLE sitebuilt.database_user_info ADD update_time DATETIME DEFAULT current_timestamp NULL;
-ALTER TABLE sitebuilt.database_user_info ADD level INT(4) DEFAULT 0 NULL;
-ALTER TABLE sitebuilt.database_user_info ADD last_login_ip VARCHAR(40) DEFAULT '' COMMENT '最后登录的机器ip';
+  id                        int auto_increment
+    primary key,
+  account                   varchar(20) default ''             null
+  comment '用户名',
+  password                  varchar(100) default ''            null
+  comment '密码',
+  last_login_time           datetime default CURRENT_TIMESTAMP null,
+  create_time               datetime default CURRENT_TIMESTAMP null,
+  update_time               datetime default CURRENT_TIMESTAMP null,
+  level                     int(4) default '0'                 null,
+  last_login_ip             varchar(40) default ''             null
+  comment '最后登录的机器ip',
+  last_update_password_time datetime default CURRENT_TIMESTAMP null
+  comment '最后一次更新密码时间',
+  version                   int default '0'                    null
+  comment '修改版本,亦可用于乐观锁',
+  email                     varchar(40) default ''             null
+  comment '个人邮箱',
+  online_level              int(4) default '0'                 null,
+  status                    int(4) default '1'                 null,
+  default_schema            varchar(20) default 'sitebuilt'    null,
+  after_login_redirect      varchar(50)                        null,
+  constraint database_user_info_account_uindex
+  unique (account)
+)
+  charset = latin1;
 
-CREATE UNIQUE INDEX database_user_info_account_uindex ON sitebuilt.database_user_info (account);
 
-CREATE TABLE sitebuilt.database_user_sql_history
+-- 用户SQL收藏表
+create table database_user_favorite
 (
-    id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    user_id INT(11) DEFAULT 0 COMMENT 'database_user_info表对应的id',
-    sql_detail VARCHAR(2000) DEFAULT '' COMMENT '执行的SQL详情',
-    create_time DATETIME DEFAULT current_timestamp COMMENT '记录创建时间即执行SQL时间',
-    client_ip VARCHAR(40) DEFAULT '' COMMENT '执行sql时登录的客户端ip',
-    server_ip VARCHAR(40) DEFAULT '' COMMENT '执行SQL的服务端ip',
-    env VARCHAR(20) DEFAULT '' COMMENT '执行的数据库环境：test、stage、production'
-) DEFAULT CHARSET=utf8;
+  id                  int auto_increment
+    primary key,
+  user_id             int default '0'                    null
+  comment 'database_user_info表对应的id',
+  favorite_sql_detail varchar(5000) default ''           null,
+  name                varchar(100) default ''            null
+  comment '给收藏sql取个名字吧',
+  create_time         datetime default CURRENT_TIMESTAMP null
+  comment '创建时间',
+  update_time         datetime default CURRENT_TIMESTAMP null
+  comment '更新时间',
+  delete_flag         int(2) default '0'                 null
+  comment '是否删除,0:否，1：是',
+  client_ip           varchar(40) default ''             null
+  comment '客户端ip',
+  order_sort          int(4) default '0'                 null
+  comment '排序'
+)
+  charset = utf8;
 
-CREATE TABLE sitebuilt.database_user_favorite
+
+-- sql执行历史表
+create table database_user_sql_history
 (
-    id INT(11) PRIMARY KEY AUTO_INCREMENT,
-    user_id INT(11) DEFAULT 0 COMMENT 'database_user_info表对应的id',
-    favorite_sql_detail VARCHAR(2000) DEFAULT '' COMMENT '收藏的sql',
-    name VARCHAR(100) DEFAULT '' COMMENT '给收藏sql取个名字吧',
-    create_time DATETIME DEFAULT current_timestamp COMMENT '创建时间',
-    update_time DATETIME DEFAULT current_timestamp COMMENT '更新时间',
-    delete_flag INT(2) DEFAULT 0 COMMENT '是否删除,0:否，1：是',
-    client_ip VARCHAR(40) DEFAULT '' COMMENT '客户端ip',
-    order_sort INT(4) DEFAULT 0 COMMENT '排序'
-) DEFAULT CHARSET=utf8;
+  id          bigint auto_increment
+    primary key,
+  user_id     int default '0'                    null
+  comment 'database_user_info表对应的id',
+  sql_detail  varchar(2000) default ''           null
+  comment '执行的SQL详情',
+  create_time datetime default CURRENT_TIMESTAMP null
+  comment '记录创建时间即执行SQL时间',
+  client_ip   varchar(40) default ''             null
+  comment '执行sql时登录的客户端ip',
+  server_ip   varchar(40) default ''             null
+  comment '执行SQL的服务端ip',
+  env         varchar(20) default ''             null
+  comment '执行的数据库环境：test、stage、production'
+)
+  charset = utf8;
 
-ALTER TABLE sitebuilt.database_user_info ADD last_update_password_time DATETIME DEFAULT current_timestamp COMMENT '最后一次更新密码时间';
+create index user_id
+  on database_user_sql_history (user_id);
 
-ALTER TABLE sitebuilt.database_user_info ADD version INT DEFAULT 0 COMMENT '修改版本,亦可用于乐观锁';
 
-ALTER TABLE sitebuilt.database_user_info ADD email VARCHAR(40) DEFAULT '' COMMENT '个人邮箱';
+-- 菜单表
+create table db_tools_menus
+(
+  id           int(8) auto_increment
+    primary key,
+  title        varchar(30)                        null
+  comment '菜单名',
+  name         varchar(30)                        null
+  comment '菜单名',
+  page_url     varchar(50)                        null
+  comment 'url地址，完整url或者uri，uri为本站域名地址',
+  icon         varchar(50)                        null
+  comment '菜单图标',
+  open_type    int(2) default '1'                 null
+  comment '1:弹框打开本域名内地址，2:弹框ifream打开',
+  extend       tinyint(1) default '0'             null
+  comment '是否可以展开',
+  parent_id    int(8) default '0'                 null
+  comment '父菜单id',
+  max_open     int(2) default '-1'                null,
+  is_desk      tinyint(1) default '0'             null
+  comment '是否放置在桌面',
+  user_id      int(8) default '-1'                null
+  comment '用户自定义添加菜单用户id',
+  is_necessary tinyint(1) default '0'             null
+  comment '是否是系统菜单',
+  is_public    tinyint(2) default '0'             null
+  comment '是否公共菜单',
+  create_time  datetime default CURRENT_TIMESTAMP null,
+  update_time  datetime default CURRENT_TIMESTAMP null,
+  client_ip    varchar(50)                        null
+  comment '客户端ip',
+  sort         int(4) default '10000'             null
+)
+  comment '数据库工具菜单表'
+  charset = utf8;
 
-ALTER TABLE database_user_info ADD `online_level` int(4) default '0' null;
+-- 菜单用户信息关联表
+create table menu_auth_manage
+(
+  id          int(8) auto_increment
+    primary key,
+  menu_id     int(8)                             not null
+  comment 'db_tools_menus表中id',
+  group_id    int(8)                             not null
+  comment 'role_group表中id',
+  create_time datetime default CURRENT_TIMESTAMP null
+)
+  comment '菜单对应用户组表';
 
-UPDATE database_user_info SET online_level = `level`;
 
-ALTER TABLE database_user_info ADD `status` int(4) default '1' null;
+-- 角色组表
+create table role_group
+(
+  id             int(6) auto_increment
+    primary key,
+  role_name      varchar(50)                        not null
+  comment '用户组名',
+  description    varchar(200)                       null
+  comment '用户组描述',
+  create_date    datetime default CURRENT_TIMESTAMP null,
+  last_oper_time datetime default CURRENT_TIMESTAMP null,
+  data_state     tinyint(1) default '1'             null
+  comment '状态'
+)
+  charset = utf8;
 
-ALTER TABLE database_user_favorite MODIFY COLUMN favorite_sql_detail VARCHAR(5000) default '' null;
+-- 用户角色组关联关系表
+create table user_group
+(
+  id          int(8) auto_increment
+    primary key,
+  user_id     int(8)                             not null
+  comment '用户表中的id',
+  group_id    int(8)                             not null
+  comment 'role_group表中的id',
+  create_time datetime default CURRENT_TIMESTAMP null
+)
+  comment '用户组对应关系表';
 
-ALTER TABLE database_user_info ADD `default_schema` VARCHAR(20) default 'sitebuilt' null;
+INSERT INTO db_tool.database_user_info (id, account, password, last_login_time, create_time, update_time, level, last_login_ip, last_update_password_time, version, email, online_level, status, default_schema, after_login_redirect) VALUES (2, 'feifei', 'd93f5e64123141a1de4602cb1909f397', '2018-09-29 16:19:46', '2017-10-12 11:20:42', '2018-09-28 23:26:39', 0, '127.0.0.1', '2018-09-28 23:26:39', 1, 'feifei.lei@renren-inc.com', 0, 1, 'sitebuilt', '/winUi/index');
+INSERT INTO db_tool.database_user_info (id, account, password, last_login_time, create_time, update_time, level, last_login_ip, last_update_password_time, version, email, online_level, status, default_schema, after_login_redirect) VALUES (1, 'feifei.lei', '12aca0384a6981abfc0a3d096e6b11d4', '2018-10-30 11:50:42', '2017-10-12 11:20:42', '2018-10-22 14:20:38', 9, '127.0.0.1', '2018-10-22 14:20:38', 4, 'feifei.lei@renren-inc.com', 9, 1, 'sitebuilt', '/winUi/index');
 
-ALTER  TABLE  database_user_sql_history  ADD  INDEX(user_id);
+
+
+
+
+

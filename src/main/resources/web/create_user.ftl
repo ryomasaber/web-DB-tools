@@ -40,6 +40,12 @@
                         <input name="confirmPassword" type="password" id="confirm_password" class="col-sm-4" /><br>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-5 control-label">邮箱：</label>
+                    <div class="col-sm-5">
+                        <input name="email" id="email" class="col-sm-4"/>
+                    </div>
+                </div>
                 <br/>
                 <div class="form-group">
                 <#list databaseEnvList as databaseEnv>
@@ -98,6 +104,7 @@
                         "account": $("#username").val(),
                         "password": $("#password").val(),
                         "confirmPassword": $("#confirm_password").val(),
+                        "email": $("#email").val(),
                         "level": level,
                         "onlineLevel": onlineLevel
                     },
@@ -111,7 +118,7 @@
                             layer.msg("创建成功！")
                             window.location.href = "operate";
                         } else {
-                            layer.msg(SON.stringify(result.data));
+                            layer.msg(JSON.stringify(result.data));
                         }
                     },
                     error: function () {

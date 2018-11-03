@@ -1,5 +1,9 @@
 package com.homethy;
 
+/**
+ * Created by wkzhao on 17-5-31.
+ */
+
 import com.homethy.domain.DatabaseUserInfo;
 import com.homethy.service.UserService;
 import com.homethy.util.CookieUtil;
@@ -61,6 +65,10 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
     addInterceptor.excludePathPatterns("/newLeadAlert/**");
     addInterceptor.excludePathPatterns("/csrView/**");
     addInterceptor.excludePathPatterns("/page/**");
+    addInterceptor.excludePathPatterns("/forget");
+    addInterceptor.excludePathPatterns("/forgetPassword");
+    addInterceptor.excludePathPatterns("/reset");
+    addInterceptor.excludePathPatterns("/resetPassword");
 
     // 拦截配置
     addInterceptor.addPathPatterns("/**");

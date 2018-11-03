@@ -34,9 +34,9 @@
     <span class="topBar">Hi ${user.account}&nbsp;, 上次登录ip：${user.lastLoginIp} , 上次登录时间：${user.lastLoginTime?string("yyyy-MM-dd HH:mm:ss zzzz")} ,  <a href="/operate"> 返回</a> </span>
 </div>
 
-<div style="margin-top: 70px;">
+<div style="margin-top: 20px;">
     <form id="table-result-div" role="form" onsubmit="return false;">
-        <div class="form-group" id="result-table">
+        <div class="form-group" id="result-table" style="padding: 0 10px 0 10px;">
             <table id="tb_departments" ></table>
         </div>
 
@@ -95,12 +95,12 @@
                                             });
     }
 
-    $('#result-table').on('click-row.bs.table', function (e, row, element)
-    {
-        $(element).css({"color":"blue","font-size":"16px;"});
-        window.location.href="/operate?s=" + row.id;
-        console.log(row);
-    });
+    // $('#result-table').on('click-row.bs.table', function (e, row, element)
+    // {
+    //     $(element).css({"color":"blue","font-size":"16px;"});
+    //     window.location.href="/operate?s=" + row.id;
+    //     console.log(row);
+    // });
 
     window.onload = function() {
         var reg = /\%\+/g;

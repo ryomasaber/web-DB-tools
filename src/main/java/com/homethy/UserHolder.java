@@ -29,8 +29,13 @@ public class UserHolder {
   private HttpServletRequest httpServletRequest;
 
   public DatabaseUserInfo getUserInfo(){
-    HttpSession session = httpServletRequest.getSession();
-    return (DatabaseUserInfo)session.getAttribute(WebSecurityConfig.SESSION_KEY);
+    DatabaseUserInfo user = null;
+    try{
+      HttpSession session = httpServletRequest.getSession();
+      user = (DatabaseUserInfo)session.getAttribute(WebSecurityConfig.SESSION_KEY);
+    }catch (Exception e){
+    }
+    return user;
   }
 
   public String getENV(){

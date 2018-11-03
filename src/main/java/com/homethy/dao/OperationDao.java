@@ -1,8 +1,10 @@
 package com.homethy.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.homethy.domain.DatabaseUserSqlHistory;
+
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by leifeifei on 17-9-11.
@@ -19,4 +21,5 @@ public interface OperationDao {
 
   String getTablesJson(String env, String schema);
 
+  <T> ArrayList<T> queryObjectList(String statement, String schema, Class<T> clazz);
 }

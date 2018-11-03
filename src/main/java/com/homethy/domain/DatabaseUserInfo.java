@@ -1,8 +1,11 @@
 package com.homethy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.homethy.util.DateUtil;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zwk on 17-1-10.
@@ -13,6 +16,7 @@ public class DatabaseUserInfo {
   //用户名
   private String account;
   //密码
+  @JsonIgnore
   private String password;
   //权限，0：只读，1：读写
   private int level;
@@ -21,6 +25,7 @@ public class DatabaseUserInfo {
   //最后登录IP
   private String lastLoginIp;
   //最后更新密码时间
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Date lastUpdatePasswordTime;
   //email
   private String email;
@@ -32,6 +37,11 @@ public class DatabaseUserInfo {
   private int status;
 
   private String defaultSchema;
+
+  private String afterLoginRedirect;
+
+  @JsonIgnore
+  private List<UserRole> userRoleList;
 
   public String getDefaultSchema() {
     return defaultSchema;
@@ -134,5 +144,21 @@ public class DatabaseUserInfo {
 
   public int getOnlineLevel() {
     return onlineLevel;
+  }
+
+  public String getAfterLoginRedirect() {
+    return afterLoginRedirect;
+  }
+
+  public void setAfterLoginRedirect(String afterLoginRedirect) {
+    this.afterLoginRedirect = afterLoginRedirect;
+  }
+
+  public List<UserRole> getUserRoleList() {
+    return userRoleList;
+  }
+
+  public void setUserRoleList(List<UserRole> userRoleList) {
+    this.userRoleList = userRoleList;
   }
 }

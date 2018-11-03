@@ -23,8 +23,8 @@
         <div class="logo">
 
             <embed src="https://static.chimeroi.com/home/images/logo/logo2.svg" onload="this.style.opacity = '1'" style="opacity: 1;">
-                <img class="blackChime" style="display: none" src="//static.chimeroi.com/crm/images/logo/chime2.svg" alt="">
-                <a href="" class="logo"></a>
+            <img class="blackChime" style="display: none" src="//static.chimeroi.com/crm/images/logo/chime2.svg" alt="">
+            <a href="" class="logo"></a>
         </div>
     </section>
 </header>
@@ -103,6 +103,13 @@
                 </div>
                 <br/>
                 <div class="form-group">
+                    <label for="email" class="col-sm-5 control-label">邮箱：</label>
+                    <div class="col-sm-5">
+                        <input name="email" id="email" class="col-sm-10"/>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
                 <#list databaseEnvList as databaseEnv>
                     <lable for="level" class="col-sm-5 control-label">${databaseEnv}权限级别：</lable>
                     <div class="col-sm-5">
@@ -126,6 +133,18 @@
                     </div>
                 </div>
                 <br/>
+                <br/>
+                <div class="from-group">
+                    <label for="roleGroup" class="col-sm-5 control-label">选择所属组</label>
+                    <div class="col-sm-5">
+                        <select class="col-sm-10" id="roleGroup" >
+                        <#list roleList as role>
+                            <option value="${role.id}">${role.roleName}</option>
+                        </#list>
+                        </select>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消
@@ -155,99 +174,120 @@
                     }
                 }
             }];
+        columns.push({field: 'email',
+            title: '邮箱',
+            editable: {
+                type: 'text',
+                title: '邮箱',
+                validate: function (v) {
+                    if (!v) return '邮箱不能为空';
+                }
+            }});
         var envStr=$("#env").val();
         if(envStr == "test") {
             columns.push({field: 'level',
-                             title: '测试库权限',
-                             editable: {
-                                 type: 'select',
-                                 title: '测试库权限',
-                                 source: [{ value: "0", text:
-                                         "只读" }, { value: "1",
-                                     text: "DDL读写" }, { value: "2",
-                                     text: "DML表结构变更" },
-                                     {
-                                         value:"9",
-                                         text: "高级管理员"
-                                     }]
-                             }});
+                title: '测试库权限',
+                editable: {
+                    type: 'select',
+                    title: '测试库权限',
+                    source: [{ value: "0", text:
+                                "只读" }, { value: "1",
+                        text: "DDL读写" }, { value: "2",
+                        text: "DML表结构变更" },
+                        {
+                            value:"9",
+                            text: "高级管理员"
+                        }]
+                }});
         } else {
             columns.push({
-                             field: 'level',
-                             title: '预发布权限',
-                             editable: {
-                                 type: 'select',
-                                 title: '预发布权限',
-                                 source: [{ value: "0", text:
-                                         "只读" }, { value: "1",
-                                     text: "DDL读写" }, { value: "2",
-                                     text: "DML表结构变更" },
-                                     {
-                                         value:"9",
-                                         text: "高级管理员"
-                                     }]
-                             }
-                         },
-                         {
-                             field: 'online_level',
-                             title: '线上权限',
-                             editable: {
-                                 type: 'select',
-                                 title: '权限',
-                                 source: [{ value: "0", text:
-                                         "只读" }, { value: "1",
-                                     text: "DDL读写" }, { value: "2",
-                                     text: "DML表结构变更" },
-                                     {
-                                         value:"9",
-                                         text: "高级管理员"
-                                     }]
-                             }
-                         })
+                        field: 'level',
+                        title: '预发布权限',
+                        editable: {
+                            type: 'select',
+                            title: '预发布权限',
+                            source: [{ value: "0", text:
+                                        "只读" }, { value: "1",
+                                text: "DDL读写" }, { value: "2",
+                                text: "DML表结构变更" },
+                                {
+                                    value:"9",
+                                    text: "高级管理员"
+                                }]
+                        }
+                    },
+                    {
+                        field: 'onlineLevel',
+                        title: '线上权限',
+                        editable: {
+                            type: 'select',
+                            title: '权限',
+                            source: [{ value: "0", text:
+                                        "只读" }, { value: "1",
+                                text: "DDL读写" }, { value: "2",
+                                text: "DML表结构变更" },
+                                {
+                                    value:"9",
+                                    text: "高级管理员"
+                                }]
+                        }
+                    })
 
         }
         columns.push( {
-                          field: 'default_schema',
-                          title: '默认schema',
-                          editable: {
-                              type: 'select',
-                              title: '默认schema',
-                              source: [
-                                  {
-                                      value: "sitebuilt",
-                                      text: "sitebuilt"
-                                  },
-                                  {
-                                      value: "sitebuilt_preview",
-                                      text: "sitebuilt_preview"
-                                  },
-                                  {
-                                      value: "chime",
-                                      text: "chime"
-                                  },
-                                  {
-                                      value: "listing",
-                                      text: "listing"
-                                  }]
-                          }
-                      },
-                      {
-                          field: 'status',
-                          title: '用户状态',
-                          editable: {
-                              type: 'select',
-                              title: '用户状态',
-                              source: [
-                                  {
-                                      value: "0",
-                                      text: "禁用"
-                                  },
-                                  {
-                                      value: "1",
-                                      text: "启用"
-                                  }]
-                          }
-                      });
+                    field: 'defaultSchema',
+                    title: '默认schema',
+                    editable: {
+                        type: 'select',
+                        title: '默认schema',
+                        source: [
+                            {
+                                value: "sitebuilt",
+                                text: "sitebuilt"
+                            },
+                            {
+                                value: "sitebuilt_preview",
+                                text: "sitebuilt_preview"
+                            },
+                            {
+                                value: "chime",
+                                text: "chime"
+                            },
+                            {
+                                value: "listing",
+                                text: "listing"
+                            },
+                            {
+                                value: "chime_lead_assign",
+                                text: "chime_lead_assign"
+                            },
+                            {
+                                value: "ads_platform",
+                                text: "ads_platform"
+                            },
+                            {
+                                value: "official",
+                                text: "official"
+                            }]
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '用户状态',
+                    editable: {
+                        type: 'select',
+                        title: '用户状态',
+                        source: [
+                            {
+                                value: "0",
+                                text: "禁用"
+                            },
+                            {
+                                value: "1",
+                                text: "启用"
+                            }]
+                    }
+                });
         return columns;
 
     }
@@ -262,54 +302,54 @@
         var oTableInit = new Object();
         oTableInit.Init = function () {
             $('#tb_departments').bootstrapTable({
-                                                    url: "/getUserInfo", //请求后台的URL（*）
-                                                    method: 'get', //请求方式（*）
-                                                    toolbar: '#toolbar', //工具按钮用哪个容器
-                                                    striped: true, //是否显示行间隔色
-                                                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-                                                    pagination: true, //是否显示分页（*）
-                                                    sortable: false, //是否启用排序
-                                                    sortOrder: "asc", //排序方式
-                                                    queryParams: oTableInit.queryParams,//传递参数（*）
-                                                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
-                                                    dataField: "rows",
-                                                    responseHandler: responseHandler,
-                                                    pageNumber: 1, //初始化加载第一页，默认第一页
-                                                    pageSize: 10, //每页的记录行数（*）
-                                                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
-                                                    search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-                                                    strictSearch: true,
-                                                    showColumns: true, //是否显示所有的列
-                                                    showRefresh: true, //是否显示刷新按钮
-                                                    minimumCountColumns: 2, //最少允许的列数
-                                                    clickToSelect: true, //是否启用点击选中行
-                                                    uniqueId: "id", //每一行的唯一标识，一般为主键列
-                                                    showToggle: true, //是否显示详细视图和列表视图的切换按钮
-                                                    cardView: false, //是否显示详细视图
-                                                    detailView: false, //是否显示父子表
-                                                    columns: getColumns(),
-                                                    onEditableSave: function (field, row, oldValue, $el) {
-                                                        $.ajax({
-                                                                   type: "get",
-                                                                   url: "/update/UserInfo",
-                                                                   data: row,
-                                                                   dataType: 'JSON',
-                                                                   success: function (data, status) {
-                                                                       if (status == "success") {
-                                                                           layer.msg('更新用户成功');
-                                                                       }
-                                                                   },
-                                                                   error: function () {
-                                                                       layer.msg('编辑失败');
-                                                                   },
-                                                                   complete: function () {
+                url: "/getUserInfo", //请求后台的URL（*）
+                method: 'get', //请求方式（*）
+                toolbar: '#toolbar', //工具按钮用哪个容器
+                striped: true, //是否显示行间隔色
+                cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true, //是否显示分页（*）
+                sortable: false, //是否启用排序
+                sortOrder: "asc", //排序方式
+                queryParams: oTableInit.queryParams,//传递参数（*）
+                sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                dataField: "rows",
+                responseHandler: responseHandler,
+                pageNumber: 1, //初始化加载第一页，默认第一页
+                pageSize: 10, //每页的记录行数（*）
+                pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true, //是否显示所有的列
+                showRefresh: true, //是否显示刷新按钮
+                minimumCountColumns: 2, //最少允许的列数
+                clickToSelect: true, //是否启用点击选中行
+                uniqueId: "id", //每一行的唯一标识，一般为主键列
+                showToggle: true, //是否显示详细视图和列表视图的切换按钮
+                cardView: false, //是否显示详细视图
+                detailView: false, //是否显示父子表
+                columns: getColumns(),
+                onEditableSave: function (field, row, oldValue, $el) {
+                    $.ajax({
+                        type: "get",
+                        url: "/update/UserInfo",
+                        data: row,
+                        dataType: 'JSON',
+                        success: function (data, status) {
+                            if (status == "success") {
+                                layer.msg('更新用户成功');
+                            }
+                        },
+                        error: function () {
+                            layer.msg('编辑失败');
+                        },
+                        complete: function () {
 
-                                                                   }
+                        }
 
-                                                               });
-                                                    }
+                    });
+                }
 
-                                                });
+            });
         };
 
         oTableInit.queryParams = function (params) {
@@ -356,39 +396,39 @@
     });
 
     $("#btn_delete").click(function () {
-            var idList = "";
-            $("input[name='btSelectItem']:checked").each(function () {
-               idList += $(this).parents("tr").attr("data-uniqueid") + ",";
-            });
-            console.log(idList);
-            if(idList.length <= 0) {
-                alert("请选中要删除的数据");
-            } else if (confirm("确认要删除吗？")) {
-                $.ajax({
-                           type: "GET",
-                           url: "deleteUser",
-                           data: {
-                               "idList" : idList
-                           },
-                           success:function (msg) {
-                               if(msg.indexOf('page-id="databse-login-page"')>-1){
-                                   window.location.reload();
-                                   return false;
-                               }
-                               var result = eval('(' + msg + ')');
-                               if (msg.indexOf('执行成功')>-1) {
-                                   layer.msg("删除成功！")
-                                   $('#tb_departments').bootstrapTable('refresh', {url: "getUserInfo", query: {key: $
-                                   ("#search_username").val()}});
-                               } else {
-                                   layer.msg(result.data[0].error);
-                               }
-                           },
-                           error:function () {
-                               layer.msg("删除失败！")
-                           }
-                       })
-            }
+        var idList = "";
+        $("input[name='btSelectItem']:checked").each(function () {
+            idList += $(this).parents("tr").attr("data-uniqueid") + ",";
+        });
+        console.log(idList);
+        if(idList.length <= 0) {
+            alert("请选中要删除的数据");
+        } else if (confirm("确认要删除吗？")) {
+            $.ajax({
+                type: "GET",
+                url: "deleteUser",
+                data: {
+                    "idList" : idList
+                },
+                success:function (msg) {
+                    if(msg.indexOf('page-id="databse-login-page"')>-1){
+                        window.location.reload();
+                        return false;
+                    }
+                    var result = eval('(' + msg + ')');
+                    if (msg.indexOf('执行成功')>-1) {
+                        layer.msg("删除成功！")
+                        $('#tb_departments').bootstrapTable('refresh', {url: "getUserInfo", query: {key: $
+                                ("#search_username").val()}});
+                    } else {
+                        layer.msg(result.data[0].error);
+                    }
+                },
+                error:function () {
+                    layer.msg("删除失败！")
+                }
+            })
+        }
     });
 
     $("#btn_add").click(function () {
@@ -398,7 +438,7 @@
 
     $('#search_username').bind('input propertychange', function() {
         $('#tb_departments').bootstrapTable('refresh', {url: "getUserInfo", query: {key: $
-        ("#search_username").val()}});
+                ("#search_username").val()}});
     });
 
     $("#createUserSubmit").on("click", function () {
@@ -424,33 +464,35 @@
                 layer.msg("密码和确认密码不一致！");
             }else{
                 $.ajax({
-                           type: "POST",
-                           url: "createUserSubmit",
-                           data: {
-                               "account": $("#username").val(),
-                               "password": $("#password").val(),
-                               "confirmPassword": $("#confirm_password").val(),
-                               "level": level,
-                               "onlineLevel": onlineLevel,
-                               "defaultSchema": $("#defaultSchema").val()
-                           },
-                           success: function (msg) {
-                               if(msg.indexOf('page-id="databse-login-page"')>-1){
-                                   window.location.reload();
-                                   return false;
-                               }
-                               var result = eval('(' + msg + ')');
-                               if (msg.indexOf('执行成功')>-1) {
-                                   layer.msg("创建成功！")
-                                   $('#myModalCreateUser').modal('hide');
-                               } else {
-                                   layer.msg(result.data[0].error);
-                               }
-                           },
-                           error: function () {
-                               layer.msg("server error");
-                           }
-                       })
+                    type: "POST",
+                    url: "createUserSubmit",
+                    data: {
+                        "account": $("#username").val(),
+                        "password": $("#password").val(),
+                        "confirmPassword": $("#confirm_password").val(),
+                        "email": $("#email").val(),
+                        "level": level,
+                        "onlineLevel": onlineLevel,
+                        "defaultSchema": $("#defaultSchema").val(),
+                        "roleGroup": $("#roleGroup").val()
+                    },
+                    success: function (msg) {
+                        if(msg.indexOf('page-id="databse-login-page"')>-1){
+                            window.location.reload();
+                            return false;
+                        }
+                        var result = eval('(' + msg + ')');
+                        if (msg.indexOf('执行成功')>-1) {
+                            layer.msg("创建成功！")
+                            $('#myModalCreateUser').modal('hide');
+                        } else {
+                            layer.msg(result.data[0].error);
+                        }
+                    },
+                    error: function () {
+                        layer.msg("server error");
+                    }
+                })
             }
         }
         return false;

@@ -1,6 +1,7 @@
 package com.homethy.dao.impl;
 
 import com.homethy.constant.Constant;
+import com.homethy.domain.DatabaseUserFavorite;
 import com.homethy.domain.DatabaseUserInfo;
 import com.homethy.util.*;
 import org.apache.commons.lang.math.NumberUtils;
@@ -54,7 +55,7 @@ public class BaseDao {
       result=executeQueryResultReturn(resultSet);
     //  DBUtil.closeAllDBConnections();
     }catch (Exception e){
-      return HomethyStringUtil.returnFailResultStr("error",e.toString());
+      return HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
     return result;
   }
@@ -87,10 +88,10 @@ public class BaseDao {
     String result = null;
     try{
       int n = executeUpInSql(env,schema,statement);
-      result = HomethyStringUtil.returnResultStr("success","执行成功，影响行数："+n);
+      result = HomethyStringUtil.returnResultStr(Constant.SUCCESS,"执行成功，影响行数："+n);
      // DBUtil.closeAllDBConnections();
     }catch (Exception e){
-      return HomethyStringUtil.returnFailResultStr("error",e.toString());
+      return HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
     return result;
   }
@@ -123,7 +124,7 @@ public class BaseDao {
       }
     }
     catch(Exception e){
-      return HomethyStringUtil.returnFailResultStr("error",e.toString());
+      return HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
     return result;
   }
@@ -175,7 +176,7 @@ public class BaseDao {
       result=executeQueryResultReturn(resultSet);
       DBUtil.closeAllDBConnections();
     }catch(Exception e){
-      return HomethyStringUtil.returnFailResultStr("error",e.toString());
+      return HomethyStringUtil.returnFailResultStr(Constant.ERROR,e.toString());
     }
 
 
@@ -477,6 +478,113 @@ public class BaseDao {
   }
 
 
+
+  /**
+   * 通过反射机制生成插入sql语句
+   *
+   * @param
+   * @return
+   */
+  public static String transformToInsertSql(Object obj,String tableName) {
+    StringBuffer bufferFront = new StringBuffer();
+    StringBuffer bufferLast = new StringBuffer();
+    bufferFront.append("insert into "
+        + tableName.substring(0, 1).toLowerCase()
+        + tableName.substring(1, tableName.length()) + "(");
+    bufferLast.append(" values(");
+    // 通过class得到所有的属性不受访问控制符空值
+    Field[] fields = obj.getClass().getDeclaredFields();
+    boolean flag = true;
+    for (Field field : fields) {
+
+//      String methodName = getGetterMethodName(field.getName());
+
+      try{
+        field.setAccessible(true);
+        Object value = field.get(obj);
+        if (field.getName().equals("id") && NumberUtils.toInt(value.toString()) == 0) {
+          continue;
+        }
+
+        String str = "#{"+obj.getClass().getSimpleName()+"."+field.getName()+"},";
+//        if(value instanceof Date){
+//          value = DateUtil.format((Date)value,DateUtil.DATEFORMAT_YYYY_MM_DD_HH_MM_SS);
+//        }
+//        if(value instanceof Integer || value instanceof Long){
+//          str = value+",";
+//        }else{
+//          str = "'"+value+"',";
+//        }
+        bufferLast.append(str);
+      }catch (Exception e){
+        e.printStackTrace();
+        flag = false;
+      }
+      bufferFront.append(DBUtil.propertyInsertToField(field.getName()) + ",");
+    }
+
+    if(!flag){
+      return null;
+    }
+    bufferFront.delete(bufferFront.length() - 1, bufferFront.length());
+    bufferLast.delete(bufferLast.length() - 1, bufferLast.length());
+    bufferFront.append(")");
+    bufferLast.append(")");
+    bufferFront.append(bufferLast);
+
+    return bufferFront.toString();
+  }
+
+  /**
+   * 通过反射机制生成通用的更新语句
+   *
+   * @param
+   * @return
+   */
+  public static String transformToUpdateSql(Object obj,String tableName) {
+
+    StringBuffer bufferFront = new StringBuffer();
+    StringBuffer bufferLast = new StringBuffer();
+//    String tableName = DBUtil.propertyInsertToField(obj.getClass().getSimpleName());
+    bufferFront.append("update " + tableName.substring(0, 1).toLowerCase()
+        + tableName.substring(1, tableName.length()) + " set ");
+    long id=0;
+    // 通过class得到所有的属性不受访问控制符空值
+    Field[] fields = obj.getClass().getDeclaredFields();
+    for (Field field : fields) {
+      try{
+        field.setAccessible(true);
+        Object value = field.get(obj);
+        if(value == null){
+          continue;
+        }
+        String str = "";
+        if(value instanceof Date){
+          value = DateUtil.format((Date)value,DateUtil.DATEFORMAT_YYYY_MM_DD_HH_MM_SS);
+        }
+        if(value instanceof Integer || value instanceof Long){
+          str = "="+value+",";
+        }else{
+          str = "='"+value+"',";
+        }
+        if (field.getName().equals("id")){
+          id=(Long) value;
+          continue;
+        }
+        bufferFront.append(DBUtil.propertyInsertToField(field.getName()) + str);
+
+      }catch (Exception e){
+        e.printStackTrace();
+      }
+
+
+    }
+    bufferLast.append(" where id="+id);
+    bufferFront.delete(bufferFront.length() - 1, bufferFront.length());
+    bufferFront.append(bufferLast);
+    return bufferFront.toString();
+  }
+
   public static void main(String [] srgs){
 //    try{
 //      System.out.println(getDataByClassFiled(executeQuery("test","sitebuilt","select * from database_user_info where account='feifei'"), DatabaseUserInfo.class));
@@ -487,28 +595,30 @@ public class BaseDao {
 
 //    System.out.println(MD5Support.hex("123456", Constant.MD5KEY));
 //    System.out.println(transformToUpdateSql(DatabaseUserInfo.class));
-    DatabaseUserInfo user = new DatabaseUserInfo();
-    user.setAccount("feifei.lei");
-    user.setPassword(MD5Support.hex("lff@123", Constant.MD5KEY));
-    user.setLastLoginIp("0.0.0.0");
-    user.setLevel(2);
-    System.out.println(transformToInsertSql(user));
-
-    DatabaseUserInfo duser = new DatabaseUserInfo();
-    duser.setAccount("houjun.fan");
-    duser.setPassword(MD5Support.hex("houjun#123", Constant.MD5KEY));
-    duser.setLastLoginIp("0.0.0.0");
-    duser.setLevel(2);
-    System.out.println(transformToInsertSql(duser));
-
-    DatabaseUserInfo duser2 = new DatabaseUserInfo();
-    duser2.setAccount("qian.xu");
-    duser2.setPassword(MD5Support.hex("qian.xu%123", Constant.MD5KEY));
-    duser2.setLastLoginIp("0.0.0.0");
-    duser2.setLevel(1);
-    System.out.println(transformToInsertSql(duser2));
+//    DatabaseUserInfo user = new DatabaseUserInfo();
+//    user.setAccount("feifei.lei");
+//    user.setPassword(MD5Support.hex("lff@123", Constant.MD5KEY));
+//    user.setLastLoginIp("0.0.0.0");
+//    user.setLevel(2);
+//    System.out.println(transformToInsertSql(user));
+//
+//    DatabaseUserInfo duser = new DatabaseUserInfo();
+//    duser.setAccount("houjun.fan");
+//    duser.setPassword(MD5Support.hex("houjun#123", Constant.MD5KEY));
+//    duser.setLastLoginIp("0.0.0.0");
+//    duser.setLevel(2);
+//    System.out.println(transformToInsertSql(duser));
+//
+//    DatabaseUserInfo duser2 = new DatabaseUserInfo();
+//    duser2.setAccount("qian.xu");
+//    duser2.setPassword(MD5Support.hex("qian.xu%123", Constant.MD5KEY));
+//    duser2.setLastLoginIp("0.0.0.0");
+//    duser2.setLevel(1);
+//    System.out.println(transformToInsertSql(duser2));
 //    user.setLastLoginTime(new Date());
 //    System.out.println(executeSqlResult("test","sitebuilt","insert into database_user_favorite(user_id,favorite_sql_detail,`name`,delete_flag,client_ip,order_sort) values(1,'select * from database_user_info ','收藏',0,'127.0.0.1',0);"));
+    DatabaseUserInfo userFavorite = new DatabaseUserInfo();
+    System.out.println(transformToInsertSql(userFavorite,"database_user_info"));
   }
 }
 

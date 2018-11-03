@@ -1,18 +1,13 @@
 package com.homethy.controller;
 
 import com.homethy.UserHolder;
-import com.homethy.constant.Constant;
 import com.homethy.param.MultipartFileParam;
 import com.homethy.service.StorageService;
 import com.homethy.util.ReturnJacksonUtil;
-import com.homethy.vo.ResultStatus;
-import com.homethy.vo.ResultVo;
-import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
+/**
+ * 默认控制层
+ * Created by wenwen on 2017/4/11.
+ * version 1.0
+ */
 @Controller
 public class UploadFileController {
 
   private Logger logger = LoggerFactory.getLogger(UploadFileController.class);
+
+//    @Autowired
+//    private StringRedisTemplate stringRedisTemplate;
 
   @Autowired
   private StorageService storageService;

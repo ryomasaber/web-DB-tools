@@ -329,3 +329,7 @@ body a {
     border-radius:20px;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
 }
+
+.text-thickening{
+    font-weight: bold;
+}

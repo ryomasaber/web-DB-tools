@@ -15,6 +15,9 @@
         <div class="layui-form-item">
             <input class="layui-input" name="password" placeholder="密码" id="password" lay-verify="required" type="password" autocomplete="off">
         </div>
+        <div class="layui-form-item" style="margin-bottom: 20px;">
+             <a href="forget" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px; color: #a3c9d2c4">忘记密码？</a>
+        </div>
     <#--<div class="layui-form-item form_code">
         <input class="layui-input" name="code" placeholder="验证码" lay-verify="required" type="text" autocomplete="off">
         <div class="code"><img src="../../images/code.jpg" width="116" height="36"></div>

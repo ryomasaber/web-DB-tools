@@ -125,12 +125,15 @@ function displayTable(){
 }
 
 function changeEnvDatabase() {
+    var obj = document.getElementById("tab-style");
     if($("input[name='env']:checked").val() == "prd"){
         $("#prdoduction_database").show();
         editor1.setOption("theme","3024-day");
+        obj.style.cssText = "width:90%;margin-top: 130px;margin-left: 90px;";
     }else{
         $("#prdoduction_database").hide();
         editor1.setOption("theme","default");
+        obj.style.cssText = "width:90%;margin-top: 50px;margin-left: 90px;";
     }
     changeSchema();
 }
@@ -212,111 +215,7 @@ function formartTable(mdata){
 }
 
 
-$("#excSubmit").on("click", function () {
-    console.log(editor1.getValue())
-    if (!editor1.getValue() || !$("#dataSchema").val()) {
-        layer.msg("sql不能为空");
-        return false;
-    } else {
-        $("#excSubmit").attr("disabled",true);
-        $('#loading').show();
-        hideResultAndDescription();
-        var reg = /\ +/g;
-        var a=editor1.getValue().replace(reg," ");
-        var regsn = /\ [\r\n]/g;
-        var b=a.replace(regsn,"\r\n");
-        var regn = /[\r\n]+/g;
-        var c=a.replace(regn,"\r\n");
-        var s = c.split(";\r\n");
-        var isSingle = true;
-        if(s.length>1 && s[1]!=''){
-            isSingle=false;
-        }
-        $.ajax({
-            type: "POST",
-            url: "executeSql",
-            data: {
-                "env" : $("input[name='env']:checked").val(),
-                "schema": $("#dataSchema").val(),
-                "statement": editor1.getValue()
-            },
-            success: function (msg) {
-                if(msg.indexOf('page-id="databse-login-page"')>-1){
-                    window.location.reload();
-                    return false;
-                }
-                $("#excSubmit").attr("disabled",false);
-                $('#loading').hide();
-                var result = JSON.parse(msg);
-                var formatResult=formatJson(msg);
-                if(isSingle){
-                    var mdata;
-                    if(typeof result.data !== "undefined") {
-                        mdata=eval(result.data);
-                    } else {
-                        try {
-                            mdata = eval(result);
-                        } catch (e) {
-                            mdata = eval('[{ "success":' + '"' + result + '"'+ '}]');
-                        }
-                    }
-                    formartTable(mdata);
-                    displayTable();
-                }else{
-                    var resultData = '{ "data":{'
-                    var successCount = 0;
-                    var errorCount = 0;
-                    for(var item in result.data){
-                        resultData = resultData + '"' + item + '":';
-                        resultData = resultData + result.data[item]+',';
-                        var itemResult=JSON.parse(result.data[item]);
-                        if(typeof itemResult.status !== "undefined" && itemResult.status.code != 0){
-                            errorCount++;
-                        } else{
-                            successCount++;
-                        }
-                    }
-                    var totalCount=successCount+errorCount;
-                    if(errorCount>0){
-                        var errorCountMsg = '，执行失败数：<pan class="color_red">'+errorCount+'</pan>'
-                    }else{
-                        var errorCountMsg = '，执行失败数：0'
-                    }
-                    var countMsg = '<strong>执行成功数：'+ successCount +errorCountMsg+'，总数：'+totalCount+'</strong>'
 
-                    resultData = resultData.substring(0,resultData.length-1);
-                    resultData = resultData + "}}"
-                    try{
-                        $("#json-collapsed").JSONView(resultData, { nl2br: true, recursive_collapser: true ,escape:true });
-                        displayJsonResult();
-                        document.getElementById('excCountJson').innerHTML=countMsg;
-                        //$('.level1 .array').prev().prev().click();
-                    }
-                    catch(e){
-                        editor3.setValue(formatResult);
-                        displayTextResult();
-                        document.getElementById('excCount').innerHTML=countMsg;
-                    }
-
-                }
-
-
-
-            },
-            error: function (error) {
-                $('#loading').hide();
-                $("#excSubmit").attr("disabled",false);
-                if(isOutOfNet(error)){
-                    $('#myModal').modal('show');
-                    return false;
-                }
-                layer.msg("server error");
-            }
-        })
-
-    }
-    return false;
-});
 
 function appearTimes(inputStr, indexOfStr){
     //参数合法性判断
@@ -675,50 +574,223 @@ $("#shareUserFavoriteSql").on("click", function () {
 
 function shareFavoriteSql() {
     $.ajax({
-               type: "POST",
-               url: "shareUserFavoriteSql",
-               data: {
-                   "userId": userId,
-                   "sqlId": sqlId
-               },
-               success: function (msg) {
-                   if(msg.indexOf('page-id="databse-login-page"')>-1){
-                       window.location.reload();
-                       return false;
-                   }
-                   layer.msg("分享成功\n");
-                   $('#myModalUserName').modal('hide');
-               },
-               error: function (error) {
-                   if(isOutOfNet(error)){
-                       $('#myModal').modal('show');
-                       return false;
-                   }
-                   layer.msg("server error");
-               }
-           });
+        type: "POST",
+        url: "shareUserFavoriteSql",
+        data: {
+            "userId": userId,
+            "sqlId": sqlId
+        },
+        success: function (msg) {
+            if(msg.indexOf('page-id="databse-login-page"')>-1){
+                window.location.reload();
+                return false;
+            }
+            layer.msg("分享成功\n");
+            $('#myModalUserName').modal('hide');
+        },
+        error: function (error) {
+            if(isOutOfNet(error)){
+                $('#myModal').modal('show');
+                return false;
+            }
+            layer.msg("server error");
+        }
+    });
     return false;
 }
 
 
-    /**
-     * 上传函数
-     * @param fileInput DOM对象
-     * @param callback 回调函数
-     */
-    var getFileContent = function (fileInput, callback) {
-        if (fileInput.files && fileInput.files.length > 0 && fileInput.files[0].size > 0) {
-            //下面这一句相当于JQuery的：var file =$("#upload").prop('files')[0];
-            var file = fileInput.files[0];
-            if (window.FileReader) {
-                var reader = new FileReader();
-                reader.onloadend = function (evt) {
-                    if (evt.target.readyState == FileReader.DONE) {
-                        callback(evt.target.result);
-                    }
-                };
-                reader.readAsText(file);
-            }
+/**
+ * 上传函数
+ * @param fileInput DOM对象
+ * @param callback 回调函数
+ */
+var getFileContent = function (fileInput, callback) {
+    if (fileInput.files && fileInput.files.length > 0 && fileInput.files[0].size > 0) {
+        //下面这一句相当于JQuery的：var file =$("#upload").prop('files')[0];
+        var file = fileInput.files[0];
+        if (window.FileReader) {
+            var reader = new FileReader();
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState == FileReader.DONE) {
+                    callback(evt.target.result);
+                }
+            };
+            reader.readAsText(file);
+        }
+    }
+};
+
+var result_data = {};
+layui.use('element', function() {
+    var $ = layui.jquery;
+    var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+    //触发事件
+    var active = {
+        //在这里给active绑定几项事件，后面可通过active调用这些事件
+        tabAdd: function(content,id,name) {
+            //新增一个Tab项 传入三个参数，分别对应其标题，tab页面的地址，还有一个规定的id，是标签中data-id的属性值
+            //关于tabAdd的方法所传入的参数可看layui的开发文档中基础方法部分
+            element.tabAdd('table-tab-result', {
+                title: name,
+                content: content,
+                id: id //规定好的id
+            })
+            FrameWH();  //计算ifram层的大小
+        },
+        tabChange: function(id) {
+            //切换到指定Tab项
+            formartTable(result_data[id]);
+            displayTable();
+            element.tabChange('table-tab-result', id); //根据传入的id传入到指定的tab项
+
+        },
+        tabDelete: function (id) {
+            layer.msg("delete");
+            element.tabDelete('table-tab-result', id);//删除
+        }
+        , tabDeleteAll: function (ids) {//删除所有
+            $.each(ids, function (i,item) {
+                element.tabDelete("table-tab-result", item); //ids是一个数组，里面存放了多个id，调用tabDelete方法分别删除
+            })
         }
     };
+
+    function FrameWH() {
+        var h = $(window).height() -41- 10 - 60 -10-44 -10;
+        $("iframe").css("height",h+"px");
+    }
+
+    $(window).resize(function () {
+        FrameWH();
+    })
+
+    function closeAllTabs(){
+        var tabtitle = $(".layui-tab-title li");
+        var ids = new Array();
+        $.each(tabtitle, function (i) {
+            ids[i] = $(this).attr("lay-id");
+        })
+        //如果关闭所有 ，即将所有的lay-id放进数组，执行tabDeleteAll
+        active.tabDeleteAll(ids);
+    }
+
+    $("#excSubmit").on("click", function () {
+        console.log(editor1.getValue())
+        if (!editor1.getValue() || !$("#dataSchema").val()) {
+            layer.msg("sql不能为空");
+            return false;
+        } else {
+            $("#excSubmit").attr("disabled",true);
+            $('#loading').show();
+            hideResultAndDescription();
+            var reg = /\ +/g;
+            var a=editor1.getValue().replace(reg," ");
+            var regsn = /\ [\r\n]/g;
+            var b=a.replace(regsn,"\r\n");
+            var regn = /[\r\n]+/g;
+            var c=a.replace(regn,"\r\n");
+            var s = c.split(";\r\n");
+            var isSingle = true;
+            if(s.length>1 && s[1]!=''){
+                isSingle=false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "executeSql",
+                data: {
+                    "env" : $("input[name='env']:checked").val(),
+                    "schema": $("#dataSchema").val(),
+                    "statement": editor1.getValue()
+                },
+                success: function (msg) {
+                    if(msg.indexOf('page-id="databse-login-page"')>-1){
+                        window.location.reload();
+                        return false;
+                    }
+                    $("#table-tab-result").removeClass("layui-hide");
+                    $("#table-tab-result").addClass("layui-show");
+                    closeAllTabs();
+                    $("#excSubmit").attr("disabled",false);
+                    $('#loading').hide();
+                    var result = JSON.parse(msg);
+                    var formatResult=formatJson(msg);
+                    var tableHtml = '<form id="table-result-div" role="form" onsubmit="return false;">\n' +
+                        '                        <div class="form-group operate-result-data" id="result-table" >\n' +
+                        '                            <table id="tb_departments" ></table>\n' +
+                        '                        </div>\n' +
+                        '                    </form>';
+                    if(isSingle){
+                        var mdata;
+                        if(typeof result.data !== "undefined") {
+                            mdata=eval(result.data);
+                        } else {
+                            try {
+                                mdata = eval(result);
+                            } catch (e) {
+                                mdata = eval('[{ "success":' + '"' + result + '"'+ '}]');
+                            }
+                        }
+                        formartTable(mdata);
+                        displayTable();
+                        $("#excCountJson").hide();
+                    }else{
+                        result_data = {};
+                        var resultData = '{ "data":{'
+                        var successCount = 0;
+                        var errorCount = 0;
+                        var count = 1;
+                        for(var item in result.data){
+                            var formatData;
+                            var itemResult=JSON.parse(result.data[item]);
+                            if(typeof itemResult.status !== "undefined" && itemResult.status.code != 0){
+                                errorCount++;
+                                formatData = eval(itemResult.data);
+                            } else{
+                                successCount++;
+                                if(Array.isArray(itemResult)){
+                                    formatData = eval(result.data[item]);
+                                } else {
+                                    formatData = eval('[{ "success":' +  result.data[item] +  '}]');
+                                }
+                            }
+                            result_data[count] = formatData;
+                            active.tabAdd(tableHtml,count,item);
+                            formartTable(eval(formatData));
+                            displayTable();
+                            count++;
+                        }
+                        active.tabChange(1);
+                        var totalCount=successCount+errorCount;
+                        if(errorCount>0){
+                            var errorCountMsg = '，执行失败：<pan class="color_red">'+errorCount+'</pan>'
+                        }else{
+                            var errorCountMsg = '，执行失败：0'
+                        }
+                        var countMsg = '<strong>执行成功：'+ successCount +errorCountMsg+'，总数：'+totalCount+'</strong>'
+                        document.getElementById('excCountJson').innerHTML=countMsg;
+                        $("#excCountJson").show();
+                    }
+                },
+                error: function (error) {
+                    $('#loading').hide();
+                    $("#excSubmit").attr("disabled",false);
+                    if(isOutOfNet(error)){
+                        $('#myModal').modal('show');
+                        return false;
+                    }
+                    layer.msg("server error");
+                }
+            })
+
+        }
+        return false;
+    });
+
+    element.on('tab(table-tab-result)', function(data){
+        formartTable(result_data[data.index + 1]);
+        displayTable();
+    });
+});
 
