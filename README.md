@@ -10,7 +10,7 @@
 * 附带一些常用的开发工具,JSON格式化,freemarker语法测试,域名whois查询,正则表达式测试,分片上传文件至项目所在服务器.
 * 还有加了百度统计统计各个页面及用户分析,如需修改成自己,修改tj.ftl内容为自己的百度统计代码即可
 
-# 全兴升级版  2018/11/03
+# 全兴升级版  2018/11/03 win10风格
 * 全新window 10 风格
 * 支持主题、背景、开始菜单栏等自己定义配置
 * 可以自定义配置自己的菜单
@@ -34,6 +34,19 @@
 ![导出结果](https://github.com/hammerLei/web-DB-tools/blob/master/photo/database5.png)
 ***
 ![百度统计](https://github.com/hammerLei/web-DB-tools/blob/master/photo/baidutj.png)
+
+# win10版截图
+![1](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-0.png)
+***
+![2](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-1.png)
+***
+![3](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-2.png)
+***
+![3](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-3.png)
+***
+![4](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-4.png)
+***
+![5](https://github.com/hammerLei/web-DB-tools/blob/master/photo/win10-5.png)
 
 # 部署说明
 * 服务器下基础java环境请自行配置
