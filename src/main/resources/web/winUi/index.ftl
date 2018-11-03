@@ -48,26 +48,26 @@
                     <div class="winui-tilebox-head">快捷通道</div>
                     <div class="winui-tilebox-body">
                         <div class="winui-tile winui-tile-normal" win-title="分配给我的jira未解决的问题" win-opentype="3"
-                             win-url="https://jira.chimewiki.me/issues/?jql=resolution%20%3D%20Unresolved%20AND%20assignee%20in%20(currentUser())">
+                             win-url="">
                             <i class="fa fa-fw fa-adjust"></i>
                             <span>分配给我的未解决的jira问题</span>
                         </div>
-                        <div class="winui-tile winui-tile-normal" win-url="http://oa.renren-inc.com" win-title="OA"
+                        <div class="winui-tile winui-tile-normal" win-url="" win-title="OA"
                              win-opentype="3">
                             <i class="fa fa-fw fa-circle-o-notch"></i>
                             <span>OA</span>
                         </div>
-                        <div class="winui-tile winui-tile-normal" win-url="https://cms-online.chime.me/cms"
+                        <div class="winui-tile winui-tile-normal" win-url=""
                              win-title="Site Cms 后台" win-opentype="3">
                             <i class="fa fa-fw fa-list-alt"></i>
                             <span>Site Cms管理后台</span>
                         </div>
-                        <div class="winui-tile winui-tile-normal" win-url="https://mail.renren-inc.com/"
-                             win-title="Chime 官网" win-opentype="3">
+                        <div class="winui-tile winui-tile-normal" win-url="https://mail.qq.com/"
+                             win-title="email" win-opentype="3">
                             <i class="fa fa-fw fa-window-maximize"></i>
-                            <span>人人邮箱</span>
+                            <span>邮箱</span>
                         </div>
-                        <div class="winui-tile winui-tile-long" win-url="https://chime.me" win-title="Chime 官网"
+                        <div class="winui-tile winui-tile-long" win-url="" win-title="Chime 官网"
                              win-opentype="3">
                             <p style="font-size:30px;font-family:'STKaiti';">Tab</p>
                             <span>Chime官网</span>
@@ -113,7 +113,7 @@
                             <i class="fa fa-file-text"></i>
                             <span>freemarker解析测试</span>
                         </div>
-                        <div class="winui-tile winui-tile-normal" win-id="-5" win-url="/upload"
+                        <div class="winui-tile winui-tile-normal" win-id="-5" win-url="/"
                              win-title="文件上传" win-opentype="2">
                             <img src="/images/qzone_32.png"/>
                             <span>文件上传</span>

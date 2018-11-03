@@ -242,7 +242,7 @@
                 <li class=""><a href="/jsonFormart" target="_blank">json格式化</a></li>
                 <li class=""><a href="/regular" target="_blank">正则表达式测试工具</a></li>
                 <li class=""><a href="/freemarker" target="_blank">freemarker解析语法测试工具</a></li>
-                <li class=""><a href="/upload" target="_blank">上传文件至服务器</a></li>
+                <#--<li class=""><a href="/upload" target="_blank">上传文件至服务器</a></li>-->
             </ul>
         </div>
     </div>
