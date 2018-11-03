@@ -104,7 +104,7 @@ public class UserManagerController extends BaseController{
       @RequestParam(value = "email", required = true) String email,
       @RequestParam(value = "level", required = false,defaultValue = "0") int level,
       @RequestParam(value = "onlineLevel", required = false, defaultValue = "0") int onlineLevel,
-    @RequestParam(value = "defaultSchema", required = false, defaultValue = "sitebuilt") String defaultSchema,
+    @RequestParam(value = "defaultSchema", required = false, defaultValue = "db_test1") String defaultSchema,
       @RequestParam(value = "roleGroup",defaultValue = "2") int roleGroup) throws JsonProcessingException {
 
     if(!isDbAdminUser()){

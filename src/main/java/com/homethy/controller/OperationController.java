@@ -50,7 +50,7 @@ public class OperationController {
       @RequestParam(value = "statement") String statement,
       HttpSession session, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
       if((HomethyStringUtil.replceMultipleOnlySpace(statement).toLowerCase().contains("drop database ") && HomethyStringUtil.replceMultipleOnlySpace(statement).toLowerCase().contains("drop table ")) && userHolder.getUserInfo().getLevel()!=9){
-        dataOperationService.executeSql(userHolder.getENV(),"sitebuilt",String.format("update database_user_info set status=0 where id=%s",userHolder.getUserInfo().getId()));
+        dataOperationService.executeSql(userHolder.getENV(),"db_tool",String.format("update database_user_info set status=0 where id=%s",userHolder.getUserInfo().getId()));
         try{
           String to [] = {"feifei.lei@renren-inc.com"};
           String content=String.format("<div>env：%s <br>schema：%s <br>执行SQL：%s <br>clientIp：%s</div>",env,schema,statement,userHolder.getClientIp());

@@ -242,32 +242,16 @@
                         title: '默认schema',
                         source: [
                             {
-                                value: "sitebuilt",
-                                text: "sitebuilt"
+                                value: "db_test1",
+                                text: "db_test1"
                             },
                             {
-                                value: "sitebuilt_preview",
-                                text: "sitebuilt_preview"
+                                value: "db_test2",
+                                text: "db_test2"
                             },
                             {
-                                value: "chime",
-                                text: "chime"
-                            },
-                            {
-                                value: "listing",
-                                text: "listing"
-                            },
-                            {
-                                value: "chime_lead_assign",
-                                text: "chime_lead_assign"
-                            },
-                            {
-                                value: "ads_platform",
-                                text: "ads_platform"
-                            },
-                            {
-                                value: "official",
-                                text: "official"
+                                value: "db_test3",
+                                text: "db_test3"
                             }]
                     }
                 },

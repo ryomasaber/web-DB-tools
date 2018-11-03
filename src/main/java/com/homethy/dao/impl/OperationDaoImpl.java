@@ -86,7 +86,7 @@ public class OperationDaoImpl extends BaseDao implements OperationDao {
     databaseUserSqlHistory.setSqlDetail(HomethyStringUtil.replceSingleQuot(statement));
     databaseUserSqlHistory.setUserId(userHolder.getUserInfo().getId());
     databaseUserSqlHistory.setServerIp(userHolder.getServerIp());
-    executeSqlResult(userHolder.getENV(),"sitebuilt",transformToInsertSql(databaseUserSqlHistory));
+    executeSqlResult(userHolder.getENV(),"db_tool",transformToInsertSql(databaseUserSqlHistory));
   }
 
   @Override
