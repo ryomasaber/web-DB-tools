@@ -1,6 +1,5 @@
 package com.homethy;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +14,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 @EnableScheduling
 //@MapperScan(value = "com.homethy.dao.sys")
-public class App {
+public class Application {
 
   @Value("${env}")
   private String ENV;
@@ -28,6 +27,6 @@ public class App {
   }
 
   public static void main(String[] args) {
-    SpringApplication.run(App.class, args);
+    SpringApplication.run(Application.class, args);
   }
 }

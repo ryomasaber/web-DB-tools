@@ -28,7 +28,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.homethy.App</mainClass>
+                    <mainClass>com.homethy.Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -234,6 +234,8 @@
             <groupId>com.homethy</groupId>
             <artifactId>homethy-util</artifactId>
             <version>1.5.5-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/jar/homethy-util-1.5.5-SNAPSHOT.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -258,6 +260,8 @@
             <groupId>com.homethy</groupId>
             <artifactId>homethy-http-api-client</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/jar/homethy-http-api-client-1.0-SNAPSHOT.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

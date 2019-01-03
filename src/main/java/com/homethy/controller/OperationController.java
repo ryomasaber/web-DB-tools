@@ -2,7 +2,7 @@ package com.homethy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.homethy.UserHolder;
-import com.homethy.WebSecurityConfig;
+import com.homethy.conf.FreeMarkerConfig;
 import com.homethy.constant.Constant;
 import com.homethy.service.DataOperationService;
 import com.homethy.service.UserService;
@@ -60,7 +60,7 @@ public class OperationController {
         }
         if(HomethyStringUtil.replceMultipleOnlySpace(statement).toLowerCase().contains("drop database ")){
           session.removeAttribute("database_user");
-          CookieUtil.clear(request, response, WebSecurityConfig.USER_COOKIE);
+          CookieUtil.clear(request, response, FreeMarkerConfig.WebSecurityConfig.USER_COOKIE);
           return "login";
         }
       }

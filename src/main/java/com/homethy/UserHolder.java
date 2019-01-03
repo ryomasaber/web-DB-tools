@@ -1,5 +1,6 @@
 package com.homethy;
 
+import com.homethy.conf.FreeMarkerConfig;
 import com.homethy.domain.DatabaseUserInfo;
 import com.homethy.util.ApiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class UserHolder {
     DatabaseUserInfo user = null;
     try{
       HttpSession session = httpServletRequest.getSession();
-      user = (DatabaseUserInfo)session.getAttribute(WebSecurityConfig.SESSION_KEY);
+      user = (DatabaseUserInfo)session.getAttribute(FreeMarkerConfig.WebSecurityConfig.SESSION_KEY);
     }catch (Exception e){
     }
     return user;

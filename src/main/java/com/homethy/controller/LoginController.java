@@ -2,7 +2,7 @@ package com.homethy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.homethy.UserHolder;
-import com.homethy.WebSecurityConfig;
+import com.homethy.conf.FreeMarkerConfig;
 import com.homethy.constant.Constant;
 import com.homethy.constant.WebCodeEnum;
 import com.homethy.domain.DatabaseUserInfo;
@@ -58,8 +58,8 @@ public class LoginController {
       session.setMaxInactiveInterval(120 * 60);
       user.setLastLoginTime(new Date());
       user.setLastLoginIp(userHolder.getClientIp());
-      CookieUtil.saveSessionCookie(request, response, WebSecurityConfig.USER_COOKIE, CookieUtil.encode(user.getId(),MD5Support.hex(String.valueOf(System.currentTimeMillis()))));
-      CookieUtil.saveSessionCookie(request, response, WebSecurityConfig.VERSION, CookieUtil.encode(user.getVersion()*user.getId(),MD5Support.hex(String.valueOf(user.getLastUpdatePasswordTime()))));
+      CookieUtil.saveSessionCookie(request, response, FreeMarkerConfig.WebSecurityConfig.USER_COOKIE, CookieUtil.encode(user.getId(),MD5Support.hex(String.valueOf(System.currentTimeMillis()))));
+      CookieUtil.saveSessionCookie(request, response, FreeMarkerConfig.WebSecurityConfig.VERSION, CookieUtil.encode(user.getVersion()*user.getId(),MD5Support.hex(String.valueOf(user.getLastUpdatePasswordTime()))));
 
       userService.updateLastLoginData(user);
       return ReturnJacksonUtil.resultOk();
@@ -71,7 +71,7 @@ public class LoginController {
   @RequestMapping(value = "/logout", method = {RequestMethod.GET})
   public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
     session.removeAttribute("database_user");
-    CookieUtil.clear(request, response, WebSecurityConfig.USER_COOKIE);
+    CookieUtil.clear(request, response, FreeMarkerConfig.WebSecurityConfig.USER_COOKIE);
     return "login";
   }
 
